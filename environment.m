@@ -10,17 +10,19 @@ n_ped = 30
 size = length(pedestrians);
 
 X = pedestrians;
-hull = [];
+hull = {};
 figure;
 for cluster = 1:clusters
     plot(X(idx==cluster,1),X(idx==cluster,2),'.','MarkerSize',12);
     ped = X(idx == cluster,:);
     if length(ped) > 2
         [k, av] = convhull(ped);
-        hull = [hull;{k}];
+        hull = [hull; k];
     else
-        hull=[hull;{1,2}]
+        
+        hull = [hull; 1:length(ped)]
     end
+
     hold on
 end
 
@@ -29,10 +31,6 @@ plot(C(:,1),C(:,2),'kx',...
 legend('Cluster 1','Cluster 2','Cluster3','Centroids',...
        'Location','NW')
 
-
-
-% plot(pedestrians(:,1),pedestrians(:, 2),'*');
-% hold on;
 figure;
 for i = 1:clusters
     k = hull{i}
@@ -43,7 +41,6 @@ for i = 1:clusters
 end
 xlim([0 5])
 ylim([0 5])
-% % pedestrians(1,k),pedestrians(2,k)
 
 % robotRadius = 0.1;
 % map = generate_map(side, resolution, pedestrians, k);
