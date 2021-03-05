@@ -1,0 +1,27 @@
+cla
+close all
+side = 5;
+
+pedestrians= generate_groups(3);
+
+[k, av] = convhull(pedestrians(1,:), pedestrians(2,:));
+
+plot(pedestrians(1,:),pedestrians(2,:),'*');
+hold on;
+plot(pedestrians(1,k),pedestrians(2,k));
+% pedestrians(1,k),pedestrians(2,k)
+
+robotRadius = 0.1;
+map = generate_map(5, 100, pedestrians, k);
+
+plan_path(map, robotRadius);
+% startLocation = ;
+% goalLocation = ;
+
+bug = Bug2(map);      % create navigation object
+bug.goal = [2.5, 5];  % set the goal
+bug.path([2.5, 0]);
+function y = generate_groups(side)
+    
+    y = rand(2,20)*side;
+end
