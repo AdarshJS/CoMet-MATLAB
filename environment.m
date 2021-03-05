@@ -42,9 +42,9 @@ end
 xlim([0 5])
 ylim([0 5])
 
-% robotRadius = 0.1;
-% map = generate_map(side, resolution, pedestrians, k);
-% plan_path(map, robotRadius);
+robotRadius = 0.1;
+map = generate_map(pedestrians, hull, clusters, idx);
+plan_path(map, robotRadius);
 % map_matrix = occupancyMatrix(map);
 % 
 % %about map_matrix

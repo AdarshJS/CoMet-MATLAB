@@ -1,10 +1,21 @@
 
-function map = generate_map(side, resolution, pedestrians, hull)
+function map = generate_map(pedestrians, hull, n_clusters, idx)
+    side = 5;
+    resolution = 100;
+    n_clusters
     map = binaryOccupancyMap(side, side, resolution);
-    for id = 1:length(hull)-1
-       [x, y] = fillline(pedestrians(:,hull(id)), pedestrians(:,hull(id+1)), 100) ;
-       setOccupancy(map, [x(:)+1, y(:)+1], 1);
-       inflate(map, 0.01)
+    for i = 1:n_clusters
+        k = hull{i}
+        ped = pedestrians(idx == i,:)
+        for id = 1:length(k)-1
+           if length(ped) == 1
+               continue
+           end
+           [x, y] = fillline(ped(k(id),:), ped(k(id+1),:), 200) ;
+           setOccupancy(map, [x(:)+1, y(:)+1], 1);
+           %inflate(map, 0.01)
+        end
+    
     end
     figure     
     show(map)
