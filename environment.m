@@ -3,32 +3,77 @@ close all
 side = 5;
 small_side = 3;
 resolution = 25;
+clusters = 6;
+n_ped = 30
 
-pedestrians= generate_groups(small_side);
+[pedestrians, idx, C]= generate_groups(small_side, clusters, n_ped);
+size = length(pedestrians);
 
-[k, av] = convhull(pedestrians(1,:), pedestrians(2,:));
+X = pedestrians;
+hull = [];
+figure;
+for cluster = 1:clusters
+    plot(X(idx==cluster,1),X(idx==cluster,2),'.','MarkerSize',12);
+    ped = X(idx == cluster,:);
+    if length(ped) > 2
+        [k, av] = convhull(ped);
+        hull = [hull;{k}];
+    else
+        hull=[hull;{1,2}]
+    end
+    hold on
+end
 
-plot(pedestrians(1,:),pedestrians(2,:),'*');
-hold on;
-plot(pedestrians(1,k),pedestrians(2,k));
+plot(C(:,1),C(:,2),'kx',...
+     'MarkerSize',15,'LineWidth',3) 
+legend('Cluster 1','Cluster 2','Cluster3','Centroids',...
+       'Location','NW')
+
+
+
+% plot(pedestrians(:,1),pedestrians(:, 2),'*');
+% hold on;
+figure;
+for i = 1:clusters
+    k = hull{i}
+    ped = X(idx == i,:)
+    length(ped)
+    plot(ped(k,1),ped(k,2));
+    hold on;
+end
 xlim([0 5])
 ylim([0 5])
-% pedestrians(1,k),pedestrians(2,k)
+% % pedestrians(1,k),pedestrians(2,k)
 
-robotRadius = 0.1;
-map = generate_map(side, resolution, pedestrians, k);
-plan_path(map, robotRadius);
-map_matrix = occupancyMatrix(map);
+% robotRadius = 0.1;
+% map = generate_map(side, resolution, pedestrians, k);
+% plan_path(map, robotRadius);
+% map_matrix = occupancyMatrix(map);
+% 
+% %about map_matrix
+% 
+% %bug = Bug2(map_matrix);
+% %start = [60, 5];
+% goal = [55, 120]; 
+% %bug.plot()
+% %path = bug.query(start, goal, 'animate', 'current');
 
-about map_matrix
-
-bug = Bug2(map_matrix);
-start = [60, 5];
-goal = [55, 120]; 
-bug.plot()
-path = bug.query(start, goal, 'animate', 'current');
-
-function y = generate_groups(small_side)
+function [y, idx, C] = generate_groups(small_side,clusters, n_ped)
+    max_groups =6;
+    max_group_size = 3;
+    groups = [];
     
-    y = rand(2,20)*small_side;
+    % Group size
+%     n = randsample(max_groups, 1) 
+%     for i = 1:n
+%         mu = [(small_side*i/n) randsample(small_side,1)]
+%         Sigma = [0.5 0.5; 0.5 2];
+%         R = mvnrnd(mu,Sigma,max_group_size)
+% %         z = normrnd((small_side+.6*rand(1,1) )*(i/n), .3 , [max_group_size, 2])
+%         groups = [groups; R];
+%     end
+    y = rand(n_ped,2)*small_side;
+    [idx,C] = kmeans(y,clusters);
+    
 end
+
