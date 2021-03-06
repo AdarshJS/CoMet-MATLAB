@@ -3,8 +3,8 @@ close all
 side = 5;
 small_side = 3;
 resolution = 25;
-clusters = 7;
-n_ped = 50
+clusters = 3;
+n_ped = 10
 
 [pedestrians, idx, C, idx_fz, C_fz] = generate_groups(small_side, clusters, n_ped);
 size = length(pedestrians);
@@ -98,13 +98,13 @@ bug = Bug2(map_matrix);
 bug.plot()
 path = bug.query(start, goal);
 % path = bug.query(start, goal, 'current');
-length(path)
+
 figure;
 bug_fz = Bug2(map_matrix_fz);
 bug_fz.plot()
 path_fz = bug_fz.query(start, goal);
 
-length(path_fz)
+length(path_fz), length(path)
 
 %about map_matrix
 

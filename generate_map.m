@@ -11,14 +11,16 @@ function map = generate_map(pedestrians, hull, n_clusters, idx)
            if length(ped) == 1
                continue
            end
-           [x, y] = fillline(ped(k(id),:), ped(k(id+1),:), 200) ;
+           [x, y] = fillline(ped(k(id),:), ped(k(id+1),:), 100) ;
            setOccupancy(map, [x(:)+1, y(:)+1], 1);
-           %inflate(map, 0.01)
+           
         end
     
     end
-    figure     
-    show(map)
+    
+    inflate(map, 0.07)
+       % setOccupancy(map, [x(:)+1, y(:)+1], 1);      
+%     show(map)
 end 
 
 function [xx,yy]=fillline(startp,endp,pts)
